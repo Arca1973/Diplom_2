@@ -11,12 +11,7 @@ package org.example.api;
 
         public static final String ORDERS_ENDPOINT = "/api/orders";
 
-        // Данные пользователя
-        public static final String EMAIL = "ninja" + (int) (Math.random() * 1000000)+"@yandex.ru";
-        public static final String PASSWORD = "1234" + (int) (Math.random() * 1000000);
-        public static final String NAME = "saske" + (int) (Math.random() * 1000000);
-        public static final String  accessToken;
-        public static final String  refreshToken;
+
 
     }
 

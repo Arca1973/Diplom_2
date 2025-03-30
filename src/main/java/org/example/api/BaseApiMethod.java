@@ -17,11 +17,11 @@ public abstract class BaseApiMethod {
             .addFilter(new ResponseLoggingFilter())
             .build();
 
-    public static Response sendDeleteRequest(String endpoint, String body){
+    public static Response sendDeleteRequest(String endpoint, String accessToken){
 
         return given()
                 .spec(requestSpecification)
-                .body(body)
+                .header("Authorization",  accessToken)
                 .when()
                 .delete(endpoint);
     }
