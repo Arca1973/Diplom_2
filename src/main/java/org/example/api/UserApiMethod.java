@@ -24,6 +24,13 @@ public class UserApiMethod extends BaseApiMethod {
         String body = gson.toJson(courierData);
         return sendPostRequest(LOGIN_USER_ENDPOINT, body);
     }
+    @Step("Запрос на изменение данных пользоваеля")
+    public Response editUserData(String accessToken, String email, String password, String name) {
+
+        UserModel.UserData courierData = new UserModel.UserData(email, password, name);
+        String body = gson.toJson(courierData);
+        return sendPatchRequest( USER_INFO_ENDPOINT, accessToken, body);
+    }
     @Step("Запрос на удаление пользоваеля")
     public String deleteUser(String accessToken) {
         if (accessToken!=null) {

@@ -6,7 +6,7 @@ public class ServerResponseModel {
     public String accessToken;
     public String refreshToken;
        public static class User {
-        public String email;
-        public String name;
+        public static String email;
+        public static String name;
     }
 }
