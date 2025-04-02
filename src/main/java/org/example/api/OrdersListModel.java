@@ -1,16 +1,12 @@
 package org.example.api;
 
-
 import java.util.List;
 
 public class OrdersListModel {
-
     private boolean success;
     private List<OrderModel> orders;
     private int total;
     private int totalToday;
-
-
     public boolean isSuccess() {
         return success;
     }

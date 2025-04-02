@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class EditUserDataTest {
-    String ACCESSETOKEN = null;
+    String ACCESS_TOKEN  = null;
     // Данные пользователя
     private String EMAIL;
     private String PASSWORD;
@@ -19,7 +19,6 @@ public class EditUserDataTest {
 
     @Before
     @Step("Отправляем запрос на  создание пользователя")
-
     public void setUp() {
         EMAIL = "ninja" + (int) (Math.random() * 1000000) + "@yandex.ru";
         PASSWORD = "1234" + (int) (Math.random() * 1000000);
@@ -27,35 +26,30 @@ public class EditUserDataTest {
         new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         Response response = new UserApiMethod().loginUser(EMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
-        ACCESSETOKEN = responseData.accessToken;
+        ACCESS_TOKEN  = responseData.accessToken;
     }
-
-    ;
 
     @Test
     @DisplayName("Успешное изменение EMAIL пользователя c авторизацией")
     public void editUserEmailWithAutorizationTest() {
         String NEWEMAIL = "NEW" + EMAIL;
-        Response response = new UserApiMethod().editUserData(ACCESSETOKEN, NEWEMAIL, PASSWORD, NAME);
+        Response response = new UserApiMethod().editUserData(ACCESS_TOKEN , NEWEMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         Assert.assertEquals(HttpStatus.SC_OK, statusCode);
         Assert.assertTrue((boolean) responseData.success);
-
     }
 
     @Test
     @DisplayName("Успешное изменение NAME пользователя c авторизацией")
     public void editUserNameWithAutorizationTest() {
         String NEWNAME = "NEW" + NAME;
-        Response response = new UserApiMethod().editUserData(ACCESSETOKEN, EMAIL, PASSWORD, NEWNAME);
+        Response response = new UserApiMethod().editUserData(ACCESS_TOKEN , EMAIL, PASSWORD, NEWNAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         Assert.assertEquals(HttpStatus.SC_OK, statusCode);
         Assert.assertTrue((boolean) responseData.success);
-
     }
-
 
     @Test
     @DisplayName("Без успешное изменение EMAIL пользователя без авторизацией")
@@ -83,8 +77,6 @@ public class EditUserDataTest {
 
     @After
     public void tearDown() {
-        ACCESSETOKEN = new UserApiMethod().deleteUser(ACCESSETOKEN);
+        ACCESS_TOKEN  = new UserApiMethod().deleteUser(ACCESS_TOKEN );
     }
-
-
 }

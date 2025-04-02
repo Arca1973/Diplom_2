@@ -19,7 +19,6 @@ public abstract class BaseApiMethod {
             .build();
 
     public static Response sendDeleteRequest(String endpoint, String accessToken) {
-
         return given()
                 .spec(requestSpecification)
                 .header("Authorization", accessToken)
@@ -52,9 +51,7 @@ public abstract class BaseApiMethod {
                 .body(body)
                 .when()
                 .patch(endpoint);
-
     }
-
 }
 
 

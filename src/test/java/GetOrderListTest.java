@@ -1,4 +1,3 @@
-
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -15,15 +14,13 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class GetOrderListTest {
-
-    String ACCESSETOKEN = null;
+    String ACCESS_TOKEN = null;
     // Данные пользователя
     private String EMAIL;
     private String PASSWORD;
     private String NAME;
     private String ingredient1;
     private String ingredient2;
-
 
     @Before
     public void setUp() {
@@ -35,41 +32,31 @@ public class GetOrderListTest {
         new UserApiMethod().createUser(EMAIL, PASSWORD, NAME); //создаем нового пользователя
         Response response = new UserApiMethod().loginUser(EMAIL, PASSWORD, NAME); //авторизация пользователя
         var responseData = response.as(ServerResponseModel.class);
-        ACCESSETOKEN = responseData.accessToken;
-        new OrderApiMethod().CreateOrder(ACCESSETOKEN, ingredient1, ingredient2); //создаем заказ пользователя
+        ACCESS_TOKEN = responseData.accessToken;
+        new OrderApiMethod().CreateOrder(ACCESS_TOKEN, ingredient1, ingredient2); //создаем заказ пользователя
     }
-
-    ;
-
 
     @Test
     @DisplayName("Проверка получения списка заказов  с авторизацией")
     public void GetOrderListWithAutorizationTest() {
-
-
-        Response response = new OrderApiMethod().getOrderList(ACCESSETOKEN);
+        Response response = new OrderApiMethod().getOrderList(ACCESS_TOKEN );
         var responseData = response.as(OrdersListModel.class);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         Assert.assertFalse(responseData.getOrders().isEmpty());
-
     }
 
     @Test
     @DisplayName("Проверка получения списка заказов  без авторизацией")
     public void GetOrderListWithoutAutorizationTest() {
-
-
         Response response = new OrderApiMethod().getOrderList("");
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatusCode());
         Assert.assertEquals("You should be authorised", responseData.message);
-
     }
 
     @After
     public void tearDown() {
-        ACCESSETOKEN = new UserApiMethod().deleteUser(ACCESSETOKEN); //удаляем пользователя
+        ACCESS_TOKEN = new UserApiMethod().deleteUser(ACCESS_TOKEN ); //удаляем пользователя
     }
-
 }
 

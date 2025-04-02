@@ -11,13 +11,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.Assert;
 
-import static org.example.api.ApiConstants.*;
-
 @RunWith(JUnit4.class)
 public class CreateUserTest {
-
     int statusCode = 0;
-    String ACCESSETOKEN = null;
+    String ACCESS_TOKEN  = null;
     // Данные пользователя
     private String EMAIL;
     private String PASSWORD;
@@ -31,30 +28,24 @@ public class CreateUserTest {
         NAME = "saske" + (int) (Math.random() * 1000000);
     }
 
-
     @Test
     @DisplayName("Успешное создание пользователя при вводе валидных данных")
-
     public void validDataUserCreationTest() {
-
         Response response = new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESSETOKEN = responseData.accessToken;
+        ACCESS_TOKEN  = responseData.accessToken;
         Assert.assertEquals(HttpStatus.SC_OK, statusCode);
         Assert.assertTrue((boolean) responseData.success);
     }
 
-
     @Test
     @DisplayName("Безуспешная попытка создания пользователя без EMAIL")
-
     public void withoutEmailUserCreationTest() {
-
         Response response = new UserApiMethod().createUser("", PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESSETOKEN = responseData.accessToken;
+        ACCESS_TOKEN  = responseData.accessToken;
         Assert.assertEquals(HttpStatus.SC_FORBIDDEN, statusCode);
         Assert.assertFalse((boolean) responseData.success);
         Assert.assertEquals("Email, password and name are required fields", responseData.message);
@@ -62,12 +53,11 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Безуспешная попытка создания пользователя без PASSWORD")
-
     public void withoutPasswordlUserCreationTest() {
         Response response = new UserApiMethod().createUser(EMAIL, "", NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESSETOKEN = responseData.accessToken;
+        ACCESS_TOKEN  = responseData.accessToken;
         Assert.assertEquals(HttpStatus.SC_FORBIDDEN, statusCode);
         Assert.assertFalse((boolean) responseData.success);
         Assert.assertEquals("Email, password and name are required fields", responseData.message);
@@ -75,12 +65,11 @@ public class CreateUserTest {
 
     @Test
     @DisplayName("Безуспешная попытка создания пользователя без NAME")
-
-    public void withoutNamelUserCreationTest() {
+    public void withoutNameUserCreationTest() {
         Response response = new UserApiMethod().createUser(EMAIL, PASSWORD, "");
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESSETOKEN = responseData.accessToken;
+        ACCESS_TOKEN  = responseData.accessToken;
         Assert.assertEquals(HttpStatus.SC_FORBIDDEN, statusCode);
         Assert.assertFalse((boolean) responseData.success);
         Assert.assertEquals("Email, password and name are required fields", responseData.message);
@@ -91,22 +80,21 @@ public class CreateUserTest {
     public void duplicateLoginCreationTest() {
         Response response1 = new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         var responseData1 = response1.as(ServerResponseModel.class);
-        String ACCESSETOKEN1 = responseData1.accessToken;
+        String ACCESS_TOKEN1 = responseData1.accessToken;
         Response response = new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESSETOKEN = responseData.accessToken;
+        ACCESS_TOKEN  = responseData.accessToken;
         Assert.assertEquals(HttpStatus.SC_FORBIDDEN, statusCode);
         Assert.assertFalse((boolean) responseData.success);
         Assert.assertEquals("User already exists", responseData.message);
 
-        new UserApiMethod().deleteUser(ACCESSETOKEN1);
-        new UserApiMethod().deleteUser(ACCESSETOKEN);
+        new UserApiMethod().deleteUser(ACCESS_TOKEN1);
+        new UserApiMethod().deleteUser(ACCESS_TOKEN );
     }
-
 
     @After
     public void tearDown() {
-        ACCESSETOKEN = new UserApiMethod().deleteUser(ACCESSETOKEN);
+        ACCESS_TOKEN  = new UserApiMethod().deleteUser(ACCESS_TOKEN);
     }
 }

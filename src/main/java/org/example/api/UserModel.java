@@ -30,8 +30,6 @@ public class UserModel {// Класс для хранения данных по�
             this.name = name;
         }
 
-
-
         public UserData(String email, String password, String name) {
             this.email = email;
             this.password = password;

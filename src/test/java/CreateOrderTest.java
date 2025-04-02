@@ -15,7 +15,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class CreateOrderTest {
 
-    String ACCESSETOKEN = null;
+    String ACCESS_TOKEN  = null;
     // Данные пользователя
     private String EMAIL;
     private String PASSWORD;
@@ -35,14 +35,13 @@ public class CreateOrderTest {
         new UserApiMethod().createUser(EMAIL, PASSWORD, NAME); //создаем нового пользователя
         Response response = new UserApiMethod().loginUser(EMAIL, PASSWORD, NAME); //авторизация пользователя
         var responseData = response.as(ServerResponseModel.class);
-        ACCESSETOKEN = responseData.accessToken;
-
+        ACCESS_TOKEN  = responseData.accessToken;
     }
 
     @Test
     @DisplayName("Проверка создания  заказа  с авторизацией")
     public void createOrderWithAutorizationTest() {
-        Response response = new OrderApiMethod().CreateOrder(ACCESSETOKEN, ingredient1, ingredient2); //создаем заказ пользователя
+        Response response = new OrderApiMethod().CreateOrder(ACCESS_TOKEN , ingredient1, ingredient2); //создаем заказ пользователя
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         Assert.assertTrue((boolean) responseData.success);
@@ -60,14 +59,14 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Проверка создания  заказа с неверным хешем ингредиентов")
     public void createOrderWithNotValidIngridietsTest() {
-        Response response = new OrderApiMethod().CreateOrder(ACCESSETOKEN, ingredient_notvalid); //создаем заказ пользователя
+        Response response = new OrderApiMethod().CreateOrder(ACCESS_TOKEN , ingredient_notvalid); //создаем заказ пользователя
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
     @Test
     @DisplayName("Проверка создания  заказа  без ингридиентов")
     public void createOrderWithoutIngridietsTest() {
-        Response response = new OrderApiMethod().CreateOrder(ACCESSETOKEN); //создаем заказ пользователя
+        Response response = new OrderApiMethod().CreateOrder(ACCESS_TOKEN ); //создаем заказ пользователя
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatusCode());
         Assert.assertEquals("Ingredient ids must be provided", responseData.message);
@@ -75,8 +74,7 @@ public class CreateOrderTest {
 
     @After
     public void tearDown() {
-        ACCESSETOKEN = new UserApiMethod().deleteUser(ACCESSETOKEN); //удаляем пользователя
+        ACCESS_TOKEN  = new UserApiMethod().deleteUser(ACCESS_TOKEN ); //удаляем пользователя
     }
-
 }
 
