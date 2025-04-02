@@ -17,16 +17,16 @@ import static org.example.api.ApiConstants.*;
 public class CreateUserTest {
 
     int statusCode = 0;
-    String  ACCESSETOKEN = null;
+    String ACCESSETOKEN = null;
     // Данные пользователя
     private String EMAIL;
-    private String PASSWORD ;
+    private String PASSWORD;
     private String NAME;
 
     @Before
     public void setUp() {
         // Назначение значений аргументам
-        EMAIL = "ninja" + (int) (Math.random() * 1000000)+"@yandex.ru";
+        EMAIL = "ninja" + (int) (Math.random() * 1000000) + "@yandex.ru";
         PASSWORD = "1234" + (int) (Math.random() * 1000000);
         NAME = "saske" + (int) (Math.random() * 1000000);
     }
@@ -37,7 +37,7 @@ public class CreateUserTest {
 
     public void validDataUserCreationTest() {
 
-        Response response=  new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
+        Response response = new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         ACCESSETOKEN = responseData.accessToken;
@@ -51,7 +51,7 @@ public class CreateUserTest {
 
     public void withoutEmailUserCreationTest() {
 
-        Response response=  new UserApiMethod().createUser("", PASSWORD, NAME);
+        Response response = new UserApiMethod().createUser("", PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         ACCESSETOKEN = responseData.accessToken;
@@ -64,7 +64,7 @@ public class CreateUserTest {
     @DisplayName("Безуспешная попытка создания пользователя без PASSWORD")
 
     public void withoutPasswordlUserCreationTest() {
-        Response response=  new UserApiMethod().createUser(EMAIL, "", NAME);
+        Response response = new UserApiMethod().createUser(EMAIL, "", NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         ACCESSETOKEN = responseData.accessToken;
@@ -77,7 +77,7 @@ public class CreateUserTest {
     @DisplayName("Безуспешная попытка создания пользователя без NAME")
 
     public void withoutNamelUserCreationTest() {
-        Response response=  new UserApiMethod().createUser(EMAIL, PASSWORD, "");
+        Response response = new UserApiMethod().createUser(EMAIL, PASSWORD, "");
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         ACCESSETOKEN = responseData.accessToken;
@@ -89,10 +89,10 @@ public class CreateUserTest {
     @Test
     @DisplayName("Безуспешное создание пользователя с повторяющимся EMAIL")
     public void duplicateLoginCreationTest() {
-        Response response1=  new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
+        Response response1 = new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         var responseData1 = response1.as(ServerResponseModel.class);
         String ACCESSETOKEN1 = responseData1.accessToken;
-        Response response=  new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
+        Response response = new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
         ACCESSETOKEN = responseData.accessToken;
@@ -103,7 +103,6 @@ public class CreateUserTest {
         new UserApiMethod().deleteUser(ACCESSETOKEN1);
         new UserApiMethod().deleteUser(ACCESSETOKEN);
     }
-
 
 
     @After

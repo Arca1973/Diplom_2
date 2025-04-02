@@ -14,7 +14,7 @@ public class UserApiMethod extends BaseApiMethod {
 
         UserModel.UserData courierData = new UserModel.UserData(email, password, name);
         String body = gson.toJson(courierData);
-        return sendPostRequest(CREATE_USER_ENDPOINT, body);
+        return sendPostRequest(CREATE_USER_ENDPOINT,"", body);
     }
 
     @Step("Запрос на авторизацию пользоваеля")
@@ -22,7 +22,7 @@ public class UserApiMethod extends BaseApiMethod {
 
         UserModel.UserData courierData = new UserModel.UserData(email, password, name);
         String body = gson.toJson(courierData);
-        return sendPostRequest(LOGIN_USER_ENDPOINT, body);
+        return sendPostRequest(LOGIN_USER_ENDPOINT,"", body);
     }
     @Step("Запрос на изменение данных пользоваеля")
     public Response editUserData(String accessToken, String email, String password, String name) {
