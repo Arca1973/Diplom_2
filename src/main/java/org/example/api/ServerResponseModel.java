@@ -6,8 +6,13 @@ public class ServerResponseModel {
     public String accessToken;
     public String refreshToken;
 
+    // Вложенный класс теперь статический
+
     public static class User {
-        public static String email;
-        public static String name;
+        public String email;
+        public String name;
     }
+
+    // Добавляем объект типа User
+    public User user;
 }

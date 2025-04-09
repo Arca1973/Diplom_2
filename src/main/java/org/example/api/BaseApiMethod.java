@@ -9,7 +9,6 @@ import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 import static org.example.api.ApiConstants.BASE_URL;
 
-
 public abstract class BaseApiMethod {
     private static RequestSpecification requestSpecification = new RequestSpecBuilder()
             .setBaseUri(BASE_URL)
