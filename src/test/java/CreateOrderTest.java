@@ -1,10 +1,12 @@
 
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.example.api.OrderApiMethod;
-import org.example.api.ServerResponseModel;
-import org.example.api.UserApiMethod;
+import org.example.api.utils.OrderApiMethod;
+import org.example.api.models.ServerResponseModel;
+import org.example.api.utils.TestDataGenerator;
+import org.example.api.utils.UserApiMethod;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,9 +28,11 @@ public class CreateOrderTest {
 
     @Before
     public void setUp() {
-        EMAIL = "ninja" + (int) (Math.random() * 1000000) + "@yandex.ru";
-        PASSWORD = "1234" + (int) (Math.random() * 1000000);
-        NAME = "saske" + (int) (Math.random() * 1000000);
+        // Назначение значений аргументам
+        EMAIL = TestDataGenerator.generateRandomEmail();
+        PASSWORD = TestDataGenerator.generateRandomPassword();
+        NAME = TestDataGenerator.generateRandomName();
+
         ingredient1 = "61c0c5a71d1f82001bdaaa6d"; //"Флюоресцентная булка R2-D3"
         ingredient2 = "61c0c5a71d1f82001bdaaa6f"; //"Мясо бессмертных моллюсков Protostomia"
         ingredient_notvalid = "xxxxxxxxxxxxxxxxxxxxxxxx"; //невалидный хеш ингредиента
@@ -40,7 +44,8 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Проверка создания  заказа  с авторизацией")
-    public void createOrderWithAutorizationTest() {
+    @Description("Отправляем API запрос с валидными данными, в полученном ответе проверяем поле success и статус код")
+    public void createOrderWithAuthorizationTest() {
         Response response = new OrderApiMethod().CreateOrder(ACCESS_TOKEN , ingredient1, ingredient2); //создаем заказ пользователя
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
@@ -49,7 +54,8 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Проверка создания  заказа  без авторизации")
-    public void createOrderWithoutAutorizationTest() {
+    @Description("Отправляем API запрос с валидными данными ,но без авторизации, в полученном ответе проверяем поле success и статус код")
+    public void createOrderWithoutAuthorizationTest() {
         Response response = new OrderApiMethod().CreateOrder("", ingredient1, ingredient2); //создаем заказ пользователя
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
@@ -58,14 +64,16 @@ public class CreateOrderTest {
 
     @Test
     @DisplayName("Проверка создания  заказа с неверным хешем ингредиентов")
-    public void createOrderWithNotValidIngridietsTest() {
+    @Description("Отправляем API запрос с неверным хешем ингредиентов, в полученном ответе проверяем статус код")
+    public void createOrderWithNotValidIngredientsTest() {
         Response response = new OrderApiMethod().CreateOrder(ACCESS_TOKEN , ingredient_notvalid); //создаем заказ пользователя
         Assert.assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
     @Test
-    @DisplayName("Проверка создания  заказа  без ингридиентов")
-    public void createOrderWithoutIngridietsTest() {
+    @DisplayName("Проверка создания  заказа  без ингредиентов")
+    @Description("Отправляем API запрос без ингридиентов, в полученном ответе проверяем поле message и статус код")
+    public void createOrderWithoutIngredientsTest() {
         Response response = new OrderApiMethod().CreateOrder(ACCESS_TOKEN ); //создаем заказ пользователя
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_BAD_REQUEST, response.getStatusCode());

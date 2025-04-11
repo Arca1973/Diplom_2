@@ -1,4 +1,4 @@
-package org.example.api;
+package org.example.api.utils;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -7,7 +7,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
-import static org.example.api.ApiConstants.BASE_URL;
+import static org.example.api.utils.ApiConstants.BASE_URL;
 
 public abstract class BaseApiMethod {
     private static RequestSpecification requestSpecification = new RequestSpecBuilder()
@@ -25,7 +25,7 @@ public abstract class BaseApiMethod {
                 .delete(endpoint);
     }
 
-    public static Response sendPostRequest(String endpoint, String accessToken, String body) {
+    public static Response sendPostRequest(String endpoint, String accessToken, Object body) {
         return given()
                 .spec(requestSpecification)
                 .header("Authorization", accessToken)
@@ -43,7 +43,7 @@ public abstract class BaseApiMethod {
                 .get(endpoint);
     }
 
-    public static Response sendPatchRequest(String endpoint, String accessToken, String body) {
+    public static Response sendPatchRequest(String endpoint, String accessToken, Object body) {
         return given()
                 .spec(requestSpecification)
                 .header("Authorization", accessToken)

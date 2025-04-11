@@ -1,9 +1,11 @@
+import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.example.api.ServerResponseModel;
-import org.example.api.UserApiMethod;
+import org.example.api.models.ServerResponseModel;
+import org.example.api.utils.TestDataGenerator;
+import org.example.api.utils.UserApiMethod;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,14 +22,17 @@ public class LoginUserTest {
     @Before
     @Step("Отправляем запрос на  создание пользователя")
     public void setUp() {
-        EMAIL = "ninja" + (int) (Math.random() * 1000000) + "@yandex.ru";
-        PASSWORD = "1234" + (int) (Math.random() * 1000000);
-        NAME = "saske" + (int) (Math.random() * 1000000);
+        // Назначение значений аргументам
+        EMAIL = TestDataGenerator.generateRandomEmail();
+        PASSWORD = TestDataGenerator.generateRandomPassword();
+        NAME = TestDataGenerator.generateRandomName();
+
         new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
     }
 
     @Test
     @DisplayName("Успешная авторизация пользователя при вводе валидных данных")
+    @Description("Отправляем API запрос с валидными данными, в полученном ответе проверяем поле success и статус код")
     public void validDataUserLoginTest() {
         Response response = new UserApiMethod().loginUser(EMAIL, PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
@@ -39,6 +44,7 @@ public class LoginUserTest {
 
     @Test
     @DisplayName("Безуспешная попытка авторизации пользователя с неверным EMAIL")
+    @Description("Отправляем API запрос с неверным EMAIL, в полученном ответе проверяем поля success, message и статус код")
     public void wrongEmailUserLoginTest() {
         Response response = new UserApiMethod().loginUser("WRONG_EMAIL", PASSWORD, NAME);
         var responseData = response.as(ServerResponseModel.class);
@@ -51,6 +57,7 @@ public class LoginUserTest {
 
     @Test
     @DisplayName("Безуспешная попытка авторизации пользователя с неверным  PASSWORD")
+    @Description("Отправляем API запрос с неверным PASSWORD, в полученном ответе проверяем поля success, message и статус код")
     public void wrongPasswordUserLoginTest() {
         Response response = new UserApiMethod().loginUser(EMAIL, "WRONG_PASSWORD", NAME);
         var responseData = response.as(ServerResponseModel.class);

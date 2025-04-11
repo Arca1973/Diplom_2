@@ -1,34 +1,30 @@
-package org.example.api;
+package org.example.api.utils;
 
-import com.google.gson.Gson;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import org.example.api.models.UserModel;
 
-import static org.example.api.ApiConstants.*;
+import static org.example.api.utils.ApiConstants.*;
 
 public class UserApiMethod extends BaseApiMethod {
-    private static final Gson gson = new Gson(); // Используем Gson для сериализации
 
-    @Step("Запрос на создание пользоваеля")
+    @Step("Запрос на создание пользователя")
     public Response createUser(String email, String password, String name) {
         UserModel.UserData userData = new UserModel.UserData(email, password, name);
-        String body = gson.toJson(userData);
-        return sendPostRequest(CREATE_USER_ENDPOINT,"", body);
+        return sendPostRequest(CREATE_USER_ENDPOINT,"", userData);
     }
 
-    @Step("Запрос на авторизацию пользоваеля")
+    @Step("Запрос на авторизацию пользователя")
     public Response loginUser(String email, String password, String name) {
         UserModel.UserData userData = new UserModel.UserData(email, password, name);
-        String body = gson.toJson(userData);
-        return sendPostRequest(LOGIN_USER_ENDPOINT,"", body);
+        return sendPostRequest(LOGIN_USER_ENDPOINT,"", userData);
     }
-    @Step("Запрос на изменение данных пользоваеля")
+    @Step("Запрос на изменение данных пользователя")
     public Response editUserData(String accessToken, String email, String password, String name) {
         UserModel.UserData userData = new UserModel.UserData(email, password, name);
-        String body = gson.toJson(userData);
-        return sendPatchRequest( USER_INFO_ENDPOINT, accessToken, body);
+        return sendPatchRequest( USER_INFO_ENDPOINT, accessToken, userData);
     }
-    @Step("Запрос на удаление пользоваеля")
+    @Step("Запрос на удаление пользователя")
     public String deleteUser(String accessToken) {
         if (accessToken!=null) {
             sendDeleteRequest(USER_INFO_ENDPOINT, accessToken);

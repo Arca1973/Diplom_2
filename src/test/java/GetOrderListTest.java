@@ -1,10 +1,12 @@
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.example.api.OrderApiMethod;
-import org.example.api.OrdersListModel;
-import org.example.api.ServerResponseModel;
-import org.example.api.UserApiMethod;
+import org.example.api.utils.OrderApiMethod;
+import org.example.api.models.OrdersListModel;
+import org.example.api.models.ServerResponseModel;
+import org.example.api.utils.TestDataGenerator;
+import org.example.api.utils.UserApiMethod;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,9 +26,11 @@ public class GetOrderListTest {
 
     @Before
     public void setUp() {
-        EMAIL = "ninja" + (int) (Math.random() * 1000000) + "@yandex.ru";
-        PASSWORD = "1234" + (int) (Math.random() * 1000000);
-        NAME = "saske" + (int) (Math.random() * 1000000);
+        // Назначение значений аргументам
+        EMAIL = TestDataGenerator.generateRandomEmail();
+        PASSWORD = TestDataGenerator.generateRandomPassword();
+        NAME = TestDataGenerator.generateRandomName();
+
         ingredient1 = "61c0c5a71d1f82001bdaaa6d"; //"Флюоресцентная булка R2-D3"
         ingredient2 = "61c0c5a71d1f82001bdaaa6f"; //"Мясо бессмертных моллюсков Protostomia"
         new UserApiMethod().createUser(EMAIL, PASSWORD, NAME); //создаем нового пользователя
@@ -38,6 +42,7 @@ public class GetOrderListTest {
 
     @Test
     @DisplayName("Проверка получения списка заказов  с авторизацией")
+    @Description("Отправляем API запрос с авторизацией, проверяем статус код и что в полученном ответе содержиться не пустой список заказов")
     public void GetOrderListWithAutorizationTest() {
         Response response = new OrderApiMethod().getOrderList(ACCESS_TOKEN );
         var responseData = response.as(OrdersListModel.class);
@@ -47,6 +52,7 @@ public class GetOrderListTest {
 
     @Test
     @DisplayName("Проверка получения списка заказов  без авторизацией")
+    @Description("Отправляем API запрос без авторизации, в полученном ответе проверяем поля message и статус код")
     public void GetOrderListWithoutAutorizationTest() {
         Response response = new OrderApiMethod().getOrderList("");
         var responseData = response.as(ServerResponseModel.class);

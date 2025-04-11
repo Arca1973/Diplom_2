@@ -19,6 +19,19 @@
     </properties>
 
     <dependencies>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version> <!-- Убедитесь, что версия актуальна -->
+            <scope>provided</scope>
+        </dependency>
+        <!-- javafaker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>1.0.2</version>
+        </dependency>
         <!-- Основной артефакт RestAssured -->
         <dependency>
             <groupId>io.rest-assured</groupId>

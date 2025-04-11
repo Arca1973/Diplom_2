@@ -1,4 +1,5 @@
-package org.example.api;
+package org.example.api.models;
+
 
 public class ServerResponseModel {
     public boolean success;

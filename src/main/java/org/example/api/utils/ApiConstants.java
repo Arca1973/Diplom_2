@@ -1,4 +1,4 @@
-package org.example.api;
+package org.example.api.utils;
 
     public class ApiConstants {
         public static final String BASE_URL = "https://stellarburgers.nomoreparties.site";

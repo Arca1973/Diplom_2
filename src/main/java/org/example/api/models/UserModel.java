@@ -1,4 +1,4 @@
-package org.example.api;
+package org.example.api.models;
 
 public class UserModel {// Класс для хранения данных пользователя
     public static class UserData {
