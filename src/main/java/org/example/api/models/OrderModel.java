@@ -4,7 +4,7 @@ import java.util.List;
 
 public class OrderModel {
     private List<String> ingredients;
-    private String _id;
+    private String id;
     private String status;
     private int number;
     private String createdAt;
@@ -19,11 +19,11 @@ public class OrderModel {
     }
 
     public String get_id() {
-        return _id;
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void set_id(String id) {
+        this.id = id;
     }
 
     public String getStatus() {
@@ -58,9 +58,9 @@ public class OrderModel {
         this.updatedAt = updatedAt;
     }
 
-    public OrderModel(List<String> ingredients, String _id, String status, int number, String createdAt, String updatedAt) {
+    public OrderModel(List<String> ingredients, String id, String status, int number, String createdAt, String updatedAt) {
         this.ingredients = ingredients;
-        this._id = _id;
+        this.id = id;
         this.status = status;
         this.number = number;
         this.createdAt = createdAt;

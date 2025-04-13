@@ -21,9 +21,7 @@ public class OrderApiMethod extends BaseApiMethod {
 
         List<String> ingredientList = Arrays.asList(ingredients);
         OrderModel orderRequest = new OrderModel(ingredientList, null, null, 0, null, null);
-        Gson gson = new Gson();
-        String jsonBody = gson.toJson(orderRequest);
 
-        return sendPostRequest(ORDERS_ENDPOINT, accessToken, jsonBody);
+        return sendPostRequest(ORDERS_ENDPOINT, accessToken, orderRequest);
     }
 }
