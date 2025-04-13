@@ -12,64 +12,64 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LoginUserTest {
-    String ACCESS_TOKEN  = null;
+    String accessToken = null;
     // Данные пользователя
-    private String EMAIL;
-    private String PASSWORD;
-    private String NAME;
+    private String email;
+    private String password;
+    private String name;
     int statusCode = 0;
 
     @Before
     @Step("Отправляем запрос на  создание пользователя")
     public void setUp() {
         // Назначение значений аргументам
-        EMAIL = TestDataGenerator.generateRandomEmail();
-        PASSWORD = TestDataGenerator.generateRandomPassword();
-        NAME = TestDataGenerator.generateRandomName();
+        email = TestDataGenerator.generateRandomEmail();
+        password = TestDataGenerator.generateRandomPassword();
+        name = TestDataGenerator.generateRandomName();
 
-        new UserApiMethod().createUser(EMAIL, PASSWORD, NAME);
+        new UserApiMethod().createUser(email, password, name);
     }
 
     @Test
     @DisplayName("Успешная авторизация пользователя при вводе валидных данных")
     @Description("Отправляем API запрос с валидными данными, в полученном ответе проверяем поле success и статус код")
     public void validDataUserLoginTest() {
-        Response response = new UserApiMethod().loginUser(EMAIL, PASSWORD, NAME);
+        Response response = new UserApiMethod().loginUser(email, password, name);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESS_TOKEN  = responseData.accessToken;
+        accessToken = responseData.getAccessToken();
         Assert.assertEquals(HttpStatus.SC_OK, statusCode);
-        Assert.assertTrue((boolean) responseData.success);
+        Assert.assertTrue(responseData.isSuccess());
     }
 
     @Test
     @DisplayName("Безуспешная попытка авторизации пользователя с неверным EMAIL")
     @Description("Отправляем API запрос с неверным EMAIL, в полученном ответе проверяем поля success, message и статус код")
     public void wrongEmailUserLoginTest() {
-        Response response = new UserApiMethod().loginUser("WRONG_EMAIL", PASSWORD, NAME);
+        Response response = new UserApiMethod().loginUser("WRONG_EMAIL", password, name);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESS_TOKEN  = responseData.accessToken;
+        accessToken = responseData.getAccessToken();
         Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, statusCode);
-        Assert.assertFalse((boolean) responseData.success);
-        Assert.assertEquals("email or password are incorrect", responseData.message);
+        Assert.assertFalse(responseData.isSuccess());
+        Assert.assertEquals("email or password are incorrect", responseData.getMessage());
     }
 
     @Test
     @DisplayName("Безуспешная попытка авторизации пользователя с неверным  PASSWORD")
     @Description("Отправляем API запрос с неверным PASSWORD, в полученном ответе проверяем поля success, message и статус код")
     public void wrongPasswordUserLoginTest() {
-        Response response = new UserApiMethod().loginUser(EMAIL, "WRONG_PASSWORD", NAME);
+        Response response = new UserApiMethod().loginUser(email, "WRONG_PASSWORD", name);
         var responseData = response.as(ServerResponseModel.class);
         statusCode = response.getStatusCode();
-        ACCESS_TOKEN  = responseData.accessToken;
+        accessToken = responseData.getAccessToken();
         Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, statusCode);
-        Assert.assertFalse((boolean) responseData.success);
-        Assert.assertEquals("email or password are incorrect", responseData.message);
+        Assert.assertFalse(responseData.isSuccess());
+        Assert.assertEquals("email or password are incorrect", responseData.getMessage());
     }
 
     @After
     public void tearDown() {
-        ACCESS_TOKEN  = new UserApiMethod().deleteUser(ACCESS_TOKEN );
+        accessToken = new UserApiMethod().deleteUser(accessToken);
     }
 }

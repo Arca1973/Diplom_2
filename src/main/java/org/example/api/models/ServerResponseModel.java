@@ -1,19 +1,27 @@
 package org.example.api.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServerResponseModel {
-    public boolean success;
-    public String message;
-    public String accessToken;
-    public String refreshToken;
+    private boolean success;
+    private String message;
+    private String accessToken;
+    private String refreshToken;
 
     // Вложенный класс теперь статический
-
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class User {
-        public String email;
-        public String name;
+        private String email;
+        private String name;
     }
 
     // Добавляем объект типа User
-    public User user;
+    private User user;
 }

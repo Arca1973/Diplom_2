@@ -16,35 +16,35 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class GetOrderListTest {
-    String ACCESS_TOKEN = null;
+    String accessToken = null;
     // Данные пользователя
-    private String EMAIL;
-    private String PASSWORD;
-    private String NAME;
+    private String email;
+    private String password;
+    private String name;
     private String ingredient1;
     private String ingredient2;
 
     @Before
     public void setUp() {
         // Назначение значений аргументам
-        EMAIL = TestDataGenerator.generateRandomEmail();
-        PASSWORD = TestDataGenerator.generateRandomPassword();
-        NAME = TestDataGenerator.generateRandomName();
+        email = TestDataGenerator.generateRandomEmail();
+        password = TestDataGenerator.generateRandomPassword();
+        name = TestDataGenerator.generateRandomName();
 
         ingredient1 = "61c0c5a71d1f82001bdaaa6d"; //"Флюоресцентная булка R2-D3"
         ingredient2 = "61c0c5a71d1f82001bdaaa6f"; //"Мясо бессмертных моллюсков Protostomia"
-        new UserApiMethod().createUser(EMAIL, PASSWORD, NAME); //создаем нового пользователя
-        Response response = new UserApiMethod().loginUser(EMAIL, PASSWORD, NAME); //авторизация пользователя
+        new UserApiMethod().createUser(email, password, name); //создаем нового пользователя
+        Response response = new UserApiMethod().loginUser(email, password, name); //авторизация пользователя
         var responseData = response.as(ServerResponseModel.class);
-        ACCESS_TOKEN = responseData.accessToken;
-        new OrderApiMethod().CreateOrder(ACCESS_TOKEN, ingredient1, ingredient2); //создаем заказ пользователя
+        accessToken = responseData.getAccessToken();
+        new OrderApiMethod().CreateOrder(accessToken, ingredient1, ingredient2); //создаем заказ пользователя
     }
 
     @Test
     @DisplayName("Проверка получения списка заказов  с авторизацией")
     @Description("Отправляем API запрос с авторизацией, проверяем статус код и что в полученном ответе содержиться не пустой список заказов")
     public void GetOrderListWithAutorizationTest() {
-        Response response = new OrderApiMethod().getOrderList(ACCESS_TOKEN );
+        Response response = new OrderApiMethod().getOrderList(accessToken);
         var responseData = response.as(OrdersListModel.class);
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         Assert.assertFalse(responseData.getOrders().isEmpty());
@@ -57,12 +57,12 @@ public class GetOrderListTest {
         Response response = new OrderApiMethod().getOrderList("");
         var responseData = response.as(ServerResponseModel.class);
         Assert.assertEquals(HttpStatus.SC_UNAUTHORIZED, response.getStatusCode());
-        Assert.assertEquals("You should be authorised", responseData.message);
+        Assert.assertEquals("You should be authorised", responseData.getMessage());
     }
 
     @After
     public void tearDown() {
-        ACCESS_TOKEN = new UserApiMethod().deleteUser(ACCESS_TOKEN ); //удаляем пользователя
+        accessToken = new UserApiMethod().deleteUser(accessToken); //удаляем пользователя
     }
 }
 
